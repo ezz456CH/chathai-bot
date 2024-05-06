@@ -79,7 +79,7 @@ module.exports = {
                 'tisb': "TIS-B",
                 'mode_s': "Mode S",
                 'mode_ac': "Mode A/C",
-                'adsc': "Sat. ADS-C",
+                'adsc': "ADS-C",
                 'other': "Other"
             }[data.ac[0].type] || "Unknown") : "n/a";
 
