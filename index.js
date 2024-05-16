@@ -93,6 +93,12 @@ client.on('interactionCreate', async (interaction) => {
     else {
         try {
             const channel = client.channels.cache.get(process.env.logchannel);
+
+            if (channel === undefined) {
+                console.warn(`[WARNING] [${nowutcstring}] failed to send log: seem like log channel id is invalid`)
+                return;
+            }
+
             const commandname = interaction.commandName;
 
             let embed = new EmbedBuilder()
@@ -108,6 +114,6 @@ client.on('interactionCreate', async (interaction) => {
             console.error(`[ERROR] [${nowutcstring}] failed to send log:`, error)
         }
     }
-})
+});
 
 client.login(process.env.TOKEN);
