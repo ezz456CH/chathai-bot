@@ -63,6 +63,27 @@ module.exports = {
             let lat = data.ac[0].lat != null ? data.ac[0].lat.toFixed(3) : "n/a";
             let lon = data.ac[0].lon != null ? data.ac[0].lon.toFixed(3) : "n/a";
 
+			let ws = data.ac[0].ws != null ? data.ac[0].ws : "n/a";
+			let wd = data.ac[0].wd != null ? data.ac[0].wd : "n/a";
+			let wind_indicator;
+			if (wd >= 0 && wd < 45) {
+				wind_indicator = "↓";
+			} else if (wd >= 45 && wd < 90) {
+				wind_indicator = "↙";
+			} else if (wd >= 90 && wd < 135) {
+				wind_indicator = "←";
+			} else if (wd >= 135 && wd < 180) {
+				wind_indicator = "↖";
+			} else if (wd >= 180 && wd < 225) {
+				wind_indicator = "↑";
+			} else if (wd >= 225 && wd < 270) {
+				wind_indicator = "↗";
+			} else if (wd >= 270 && wd < 315) {
+				wind_indicator = "→";
+			} else if (wd >= 315 && wd <= 360) {
+				wind_indicator = "↘";
+			}
+
             let source = data.ac[0].type ? ({
                 'uat': "UAT",
                 'mlat': "MLAT",
@@ -123,6 +144,7 @@ module.exports = {
                         { name: 'Speed', value: `\`\`\`yaml\nGround Speed: ${gs} kt\nTrue Airspeed: ${tas} kt\nIndicated Airspeed: ${ias} kt\nMach: ${mach}\`\`\``, inline: false },
                         { name: 'Altitude', value: `\`\`\`yaml\nBaro. Altitude: ${alt_baro} ft\nBaro. Rate: ${baro_rate} ft/min\nWGS84 Altitude: ${alt_geom} ft\nGeom. Rate: ${geom_rate} ft/min\nVert. Rate: ${vertrateindicator}${vertrate} ft/min\`\`\``, inline: false },
                         { name: 'Direction', value: `\`\`\`yaml\nGround Track: ${track}°\nTrue Heading: ${true_heading}°\nMagnetic Heading: ${mag_heading}°\`\`\``, inline: false },
+                        { name: 'Wind', value: `\`\`\`yaml\nWind Direction: ${wind_indicator} ${wd}°\nWind Speed: ${ws} kt\`\`\``, inline: false },
                         { name: 'Signal & Data Source', value: `\`\`\`yaml\nSource: ${source}\nRSSI: ${rssi}\nLast Pos.: ${seen_pos} s\nLast Seen: ${seen} s\`\`\``, inline: false },
                     )
                     .setImage(thumbnail_large)
@@ -136,6 +158,7 @@ module.exports = {
                         { name: 'Speed', value: `\`\`\`yaml\nGround Speed: ${gs} kt\nTrue Airspeed: ${tas} kt\nIndicated Airspeed: ${ias} kt\nMach: ${mach}\`\`\``, inline: false },
                         { name: 'Altitude', value: `\`\`\`yaml\nBaro. Altitude: ${alt_baro} ft\nBaro. Rate: ${baro_rate} ft/min\nWGS84 Altitude: ${alt_geom} ft\nGeom. Rate: ${geom_rate} ft/min\nVert. Rate: ${vertrateindicator}${vertrate} ft/min\`\`\``, inline: false },
                         { name: 'Direction', value: `\`\`\`yaml\nGround Track: ${track}°\nTrue Heading: ${true_heading}°\nMagnetic Heading: ${mag_heading}°\`\`\``, inline: false },
+                        { name: 'Wind', value: `\`\`\`yaml\nWind Direction: ${wind_indicator} ${wd}°\nWind Speed: ${ws} kt\`\`\``, inline: false },
                         { name: 'Signal & Data Source', value: `\`\`\`yaml\nSource: ${source}\nRSSI: ${rssi}\nLast Pos.: ${seen_pos} s\nLast Seen: ${seen} s\`\`\``, inline: false },
                     )
                     .setImage(thumbnail_large)
