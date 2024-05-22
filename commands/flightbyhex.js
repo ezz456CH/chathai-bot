@@ -63,26 +63,26 @@ module.exports = {
             let lat = data.ac[0].lat != null ? data.ac[0].lat.toFixed(3) : "n/a";
             let lon = data.ac[0].lon != null ? data.ac[0].lon.toFixed(3) : "n/a";
 
-			let ws = data.ac[0].ws != null ? data.ac[0].ws : "n/a";
-			let wd = data.ac[0].wd != null ? data.ac[0].wd : "n/a";
-			let wind_indicator;
-			if (wd >= 0 && wd < 45) {
-				wind_indicator = "↓";
-			} else if (wd >= 45 && wd < 90) {
-				wind_indicator = "↙";
-			} else if (wd >= 90 && wd < 135) {
-				wind_indicator = "←";
-			} else if (wd >= 135 && wd < 180) {
-				wind_indicator = "↖";
-			} else if (wd >= 180 && wd < 225) {
-				wind_indicator = "↑";
-			} else if (wd >= 225 && wd < 270) {
-				wind_indicator = "↗";
-			} else if (wd >= 270 && wd < 315) {
-				wind_indicator = "→";
-			} else if (wd >= 315 && wd <= 360) {
-				wind_indicator = "↘";
-			}
+            let ws = data.ac[0].ws != null ? data.ac[0].ws : "n/a";
+            let wd = data.ac[0].wd != null ? data.ac[0].wd : "n/a";
+            let wind_indicator;
+            if (wd >= 0 && wd < 45) {
+                wind_indicator = "↓";
+            } else if (wd >= 45 && wd < 90) {
+                wind_indicator = "↙";
+            } else if (wd >= 90 && wd < 135) {
+                wind_indicator = "←";
+            } else if (wd >= 135 && wd < 180) {
+                wind_indicator = "↖";
+            } else if (wd >= 180 && wd < 225) {
+                wind_indicator = "↑";
+            } else if (wd >= 225 && wd < 270) {
+                wind_indicator = "↗";
+            } else if (wd >= 270 && wd < 315) {
+                wind_indicator = "→";
+            } else if (wd >= 315 && wd <= 360) {
+                wind_indicator = "↘";
+            }
 
             let source = data.ac[0].type ? ({
                 'uat': "UAT",
