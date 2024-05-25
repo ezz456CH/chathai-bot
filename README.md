@@ -28,6 +28,10 @@ A Discord bot that can do a few things.
 
 สกิน Minecraft จาก Username(Get Minecraft skin from username)
 
+### /nearbyflight
+
+ดูข้อมูลเครื่องบินใกล้เคียงจาก adsb.ezz456ch.xyz ด้วยละติจูดและลองติจูด(Get nearby flight data from adsb.ezz456ch.xyz with latitude and longitude)
+
 ### /server-info
 
 บอกข้อมูลเซิร์ฟเวอร์ของ Bot(เช่น CPU หรือ RAM ที่ใช้อยู่)(Provide information about the Bot\'s server (e.g., CPU or RAM usage))
