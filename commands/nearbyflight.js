@@ -13,24 +13,35 @@ module.exports = {
             option
                 .setName('lat')
                 .setDescription('Latitude')
+                .setDescriptionLocalizations({
+                    th: 'ละติจูด'
+                })
                 .setRequired(true)
         )
         .addNumberOption(option =>
             option
                 .setName('lon')
                 .setDescription('Longitude')
+                .setDescriptionLocalizations({
+                    th: 'ลองติจูด'
+                })
                 .setRequired(true)
         )
         .addNumberOption(option =>
             option
-                .setName('radius_mni')
-                .setDescription('Radius in nautical miles (Max 250 MNI)')
+                .setName('radius_nmi')
+                .setDescription('Radius in nautical miles(Max 250 nmi)')
+                .setDescriptionLocalizations({
+                    th: 'ระยะในไมล์ทะเล (สูงสุด 250 ไมล์ทะเล)'
+                })
+                .setMinValue(1)
+                .setMaxValue(250)
                 .setRequired(true)
         ),
     async execute(interaction) {
         const lat = interaction.options.getNumber('lat');
         const lon = interaction.options.getNumber('lon');
-        const radius = interaction.options.getNumber('radius_mni');
+        const radius = interaction.options.getNumber('radius_nmi');
         const url = `https://api.ezz456ch.xyz/api/v2/circle/${lat}/${lon}/${radius}`;
 
         await interaction.deferReply();
