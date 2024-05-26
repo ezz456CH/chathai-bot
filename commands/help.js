@@ -47,7 +47,7 @@ module.exports = {
                     { name: '/translate', value: translateth, inline: true },
                     { name: '/weather', value: weatherth, inline: true }
                 )
-                .setFooter({ text: 'หากคุณพบปัญหาหรือการแปลภาษาไม่ถูกต้อง สามารถแจ้งได้ที่ https://discord.gg/hdXVK6fMpD' });
+                .setFooter({ text: 'เจอปัญหางั้นเหรอ สามารถแจ้งได้ที่ https://discord.gg/hdXVK6fMpD หรือตั้ง Issue ที่ Github ก็ได้นะ' });
         } else {
             embed = new EmbedBuilder()
                 .setColor('#F1C40F')
@@ -63,7 +63,7 @@ module.exports = {
                     { name: '/translate', value: translateen, inline: true },
                     { name: '/weather', value: weatheren, inline: true }
                 )
-                .setFooter({ text: 'If you find a problem or incorrect translation, you can report it at https://discord.gg/hdXVK6fMpD' });
+                .setFooter({ text: 'If you find a problem, you can report it at https://discord.gg/hdXVK6fMpD or create an issue on Github' });
         }
 
         await interaction.editReply({ embeds: [embed] });
