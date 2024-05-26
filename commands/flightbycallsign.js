@@ -181,7 +181,7 @@ module.exports = {
 		if (interaction.locale === 'th') {
 			embed = new EmbedBuilder()
 				.setColor('#FFB6C1')
-				.setTitle(`${callsign}`)
+				.setTitle(callsign2)
 				.addFields(
 					{ name: `${callsign2} Information`, value: `\`\`\`yaml\nRoute: ${routeiata} (Last Update: ${updatetimerouteiata})\nReg.: ${reg}\nAircraft type: ${type}\nHex: ${hex.toUpperCase()}\nSquawk: ${squawk}\nPos.: ${lat}, ${lon}\`\`\``, inline: false },
 					{ name: 'Speed', value: `\`\`\`yaml\nGround Speed: ${gs} kt\nTrue Airspeed: ${tas} kt\nIndicated Airspeed: ${ias} kt\nMach: ${mach}\`\`\``, inline: false },
@@ -195,7 +195,7 @@ module.exports = {
 		} else {
 			embed = new EmbedBuilder()
 				.setColor('#FFB6C1')
-				.setTitle(`${callsign}`)
+				.setTitle(callsign2)
 				.addFields(
 					{ name: `${callsign2} Information`, value: `\`\`\`yaml\nRoute: ${routeiata} (Last Update: ${updatetimerouteiata})\nReg.: ${reg}\nAircraft type: ${type}\nHex: ${hex.toUpperCase()}\nSquawk: ${squawk}\nPos.: ${lat}, ${lon}\`\`\``, inline: false },
 					{ name: 'Speed', value: `\`\`\`yaml\nGround Speed: ${gs} kt\nTrue Airspeed: ${tas} kt\nIndicated Airspeed: ${ias} kt\nMach: ${mach}\`\`\``, inline: false },
