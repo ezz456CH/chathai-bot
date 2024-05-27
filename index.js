@@ -66,13 +66,13 @@ client.on('interactionCreate', async (interaction) => {
                 .setColor('#FF5555')
                 .setTitle(`(╯°□°）╯︵ ┻━┻ ▹ อิหยังวะ!?`)
                 .setDescription(`ขออภัย ดูเหมือนว่าจะมีข้อผิดพลาดเกิดขึ้นน่ะ`)
-                .setFooter({ text: 'พบปัญหางั้นเหรอ? บางทีคุณอาจจะลองไปพูดคุยที่ https://discord.gg/hdXVK6fMpD ได้นะ (っ◕‿◕)っ' });
+                .setFooter({ text: 'เจอปัญหางั้นเหรอ สามารถแจ้งได้ที่ https://discord.gg/hdXVK6fMpD หรือตั้ง Issue ที่ Github ก็ได้นะ (っ◕‿◕)っ' });
         } else {
             embed = new EmbedBuilder()
                 .setColor('#FF5555')
                 .setTitle(`(╯°□°）╯︵ ┻━┻ ▹ What's happening!?`)
                 .setDescription(`Sorry it looks like there was an error.`)
-                .setFooter({ text: 'Found an issue? Feel free to reach out to us at https://discord.gg/hdXVK6fMpD (っ◕‿◕)っ' });
+                .setFooter({ text: 'If you find a problem, you can report it at https://discord.gg/hdXVK6fMpD or create an issue on Github (っ◕‿◕)っ' });
         }
         try {
 
