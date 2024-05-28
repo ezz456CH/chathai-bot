@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { characters, characterelements } = require('./genshinimpact/characters');
+const characters = require('../data/gi-characters.json');
 
 const client = require('../index');
 
@@ -12,6 +12,22 @@ module.exports = {
         }),
     async execute(interaction) {
         await interaction.deferReply();
+
+        const elements = {
+            pyro: '1236278501594759178',
+            hydro: '1236278499334029332',
+            anemo: '1236278490123341864',
+            electro: '1236278494497869875',
+            dendro: '1236278496997675088',
+            cryo: '1236278503528464434',
+            geo: '1236278492363096146',
+        };
+
+        const characterelements = characters.reduce((acc, { name, element }) => {
+            acc[name] = elements[element];
+            return acc;
+        }, {});
+
         const getRandomCharacter = () => characters[Math.floor(Math.random() * characters.length)];
 
         let rc1, rc2, rc3, rc4;
