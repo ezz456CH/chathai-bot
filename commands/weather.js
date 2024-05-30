@@ -1,72 +1,22 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const axios = require('axios');
-
-const wtth = {
-    'Sunny': 'แจ่มใส',
-    'Clear': 'แจ่มใส',
-    'Partly cloudy': 'มีเมฆบางส่วน',
-    'Cloudy': 'มีเมฆ',
-    'Overcast': 'มีเมฆหนา',
-    'Mist': 'หมอกน้ำค้าง',
-    'Patchy rain possible': 'อาจจะมีฝนตกเป็นหย่อมๆ',
-    'Patchy snow possible': 'อาจจะมีหิมะตกเป็นหย่อมๆ',
-    'Patchy sleet possible': 'อาจจะมีฝนหิมะตกเป็นหย่อมๆ',
-    'Patchy freezing drizzle possible': 'อาจจะมีฝนละอองเยือกแข็งตกเป็นหย่อมๆ',
-    'Thundery outbreaks possible': 'อาจจะมีพายุฝนฟ้าคะนองรุนแรง',
-    'Blowing snow': 'หิมะฟุ้ง',
-    'Blizzard': 'พายุหิมะ',
-    'Fog': 'หมอก',
-    'Freezing fog': 'หมอกน้ำแข็ง',
-    'Patchy light drizzle': 'มีฝนละอองตกเป็นหย่อมๆ',
-    'Light drizzle': 'ฝนละออง',
-    'Freezing drizzle': 'ฝนละอองเยือกแข็ง',
-    'Heavy freezing drizzle': 'มีฝนละอองเยือกแข็งตกหนัก',
-    'Patchy light rain': 'มีฝนตกเล็กน้อยเป็นหย่อมๆ',
-    'Light rain': 'ฝนตกเล็กน้อย',
-    'Moderate rain at times': 'ฝนตกปานกลางบางครั้ง',
-    'Moderate rain': 'ฝนตกปานกลาง',
-    'Heavy rain at times': 'ฝนตกหนักบางครั้ง',
-    'Heavy rain': 'ฝนตกหนัก',
-    'Light freezing rain': 'ฝนเยือกแข็งเล็กน้อย',
-    'Moderate or heavy freezing rain': 'ฝนเยือกแข็งปานกลางหรือหนัก',
-    'Light sleet': 'ฝนหิมะตกเล็กน้อย',
-    'Moderate or heavy sleet': 'ฝนหิมะตกปานกลางหรือหนัก',
-    'Patchy light snow': 'มีหิมะตกเป็นหย่อมๆ',
-    'Light snow': 'หิมะตกเล็กน้อย',
-    'Patchy moderate snow': 'มีหิมะตกปานกลางเป็นหย่อมๆ',
-    'Moderate snow': 'หิมะตกปานกลาง',
-    'Patchy heavy snow': 'มีหิมะตกหนักเป็นหย่อมๆ',
-    'Heavy snow': 'หิมะตกหนัก',
-    'Ice pellets': 'มีลูกปรายน้ำแข็ง',
-    'Light rain shower': 'ฝนซู่หรือฝนไล่ช้างตกเป็นหย่อมๆ',
-    'Moderate or heavy rain shower': 'ฝนซู่หรือฝนไล่ช้างตกปานกลางหรือหนัก',
-    'Torrential rain shower': 'ฝนซู่หรือฝนไล่ช้างตกรุนแรง',
-    'Light sleet showers': 'ฝนหิมะตกเล็กน้อย',
-    'Moderate or heavy sleet showers': 'ฝนหิมะตกปานกลางหรือหนัก',
-    'Light snow showers': 'หิมะตกเล็กน้อย',
-    'Moderate or heavy snow showers': 'หิมะตกปานกลางหรือหนัก',
-    'Light showers of ice pellets': 'ฝนลูกปรายน้ำแข็งเล็กน้อย',
-    'Moderate or heavy showers of ice pellets': 'ฝนลูกปรายน้ำแข็งปานกลางหรือหนัก',
-    'Patchy light rain with thunder': 'มีฝนตกเป็นหย่อมๆและมีฟ้าคะนอง',
-    'Moderate or heavy rain with thunder': 'ฝนตกปานกลางหรือหนักและมีฟ้าคะนอง',
-    'Patchy light snow with thunder': 'มีหิมะตกเป็นหย่อมๆและมีฟ้าคะนอง',
-    'Moderate or heavy snow with thunder': 'หิมะตกปานกลางหรือหนักและมีฟ้าคะนอง',
-};
+const fs = require('fs');
+const weather_conditions_th = JSON.parse(fs.readFileSync('./data/weather/weather_conditions_th.json', 'utf8'));
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('weather')
-        .setDescription('Get weather infomation')
+        .setDescription('Get weather information')
         .setDescriptionLocalizations({
             th: 'ดูข้อมูลสภาพอากาศ'
         })
-        .addStringOption(option => 
+        .addNumberOption(option =>
             option
-                .setName('lat') 
+                .setName('lat')
                 .setDescription('Latitude')
                 .setRequired(true)
         )
-        .addStringOption(option =>
+        .addNumberOption(option =>
             option
                 .setName('long')
                 .setDescription('Longitude')
@@ -74,43 +24,97 @@ module.exports = {
         ),
     async execute(interaction) {
         const { options } = interaction;
-        const Lat = options.getString('lat');
-        const Long = options.getString('long');
+        const Lat = options.getNumber('lat');
+        const Long = options.getNumber('long');
         const wtapikey = process.env.wtapikey;
-        const url = `https://api.weatherapi.com/v1/current.json?key=${wtapikey}&q=${Lat}, ${Long}&aqi=no`
+        const url = `https://api.weatherapi.com/v1/current.json?key=${wtapikey}&q=${Lat},${Long}&aqi=no`;
 
         await interaction.deferReply();
         const response = await axios.get(url);
         const { current, location } = response.data;
-        const i = `https:${current.condition.icon}`;
-        const ct = `${current.condition.text}`;
-        const twtth = wtth[ct] || ct;
+        const icon = current.condition.icon ? `https:${current.condition.icon}` : null;
+        const conditioncode = current.condition.code;
+        const conditiontext = current.condition.text;
+        const isday = current.is_day === 1;
+        const temp_c = current.temp_c;
+        const temp_f = current.temp_f;
+        const feelslike_c = current.feelslike_c;
+        const feelslike_f = current.feelslike_f;
+        const humidity = current.humidity;
+        const wind_kph = current.wind_kph;
+        const wd = current.wind_degree;
+        const pressure_mb = current.pressure_mb;
+        const pressure_in = current.pressure_in;
+        const cloud = current.cloud;
+        const vis_km = current.vis_km;
+        const vis_miles = current.vis_miles;
+        const uv = current.uv;
+        const last_updated = current.last_updated;
+        const region = location.region;
+        const country = location.country;
+
+        let wind_indicator = "";
+		if (wd >= 0 && wd < 45) {
+			wind_indicator = "↓ ";
+		} else if (wd >= 45 && wd < 90) {
+			wind_indicator = "↙ ";
+		} else if (wd >= 90 && wd < 135) {
+			wind_indicator = "← ";
+		} else if (wd >= 135 && wd < 180) {
+			wind_indicator = "↖ ";
+		} else if (wd >= 180 && wd < 225) {
+			wind_indicator = "↑ ";
+		} else if (wd >= 225 && wd < 270) {
+			wind_indicator = "↗ ";
+		} else if (wd >= 270 && wd < 315) {
+			wind_indicator = "→ ";
+		} else if (wd >= 315 && wd <= 360) {
+			wind_indicator = "↘ ";
+		}
+
+        let conditiontextth = conditiontext;
+        if (interaction.locale === 'th') {
+            const condition = weather_conditions_th.find(c => c.code === conditioncode);
+            if (condition) {
+                conditiontextth = isday ? condition.day : condition.night;
+            }
+        }
 
         let embed;
 
         if (interaction.locale === 'th') {
             embed = new EmbedBuilder()
                 .setColor('#3498DB')
-                .setTitle(`**${twtth}**`)
+                .setTitle(conditiontextth)
                 .addFields(
-                    { name: 'อุณหภูมิ', value: `${current.temp_c}°C`, inline: true },
-                    { name: 'ความชื้น', value: `${current.humidity}%`, inline: true },
-                    { name: 'ลม', value: `${current.wind_kph} กม./ชม.`, inline: true },
-                    { name: 'อัพเดตล่าสุด', value: `${current.last_updated} ${location.region}`, inline: false }
+                    { name: 'อุณหภูมิ', value: `${temp_c}°C (${temp_f}°F)`, inline: true },
+                    { name: 'รู้สึกเหมือน', value: `${feelslike_c}°C (${feelslike_f}°F)`, inline: true },
+                    { name: 'ความชื้น', value: `${humidity}%`, inline: true },
+                    { name: 'ลม', value: `${wind_indicator}${wd}° ${wind_kph} กม./ชม.`, inline: true },
+                    { name: 'ความกดอากาศ', value: `${pressure_mb} mb (${pressure_in} in)`, inline: true },
+                    { name: 'เมฆ', value: `${cloud}%`, inline: true },
+                    { name: 'ทัศนวิสัย', value: `${vis_km} กม. (${vis_miles} ไมล์)`, inline: true },
+                    { name: 'ดัชนี UV', value: `${uv}`, inline: true },
+                    { name: 'อัพเดตล่าสุด', value: `${last_updated} ${region}, ${country}`, inline: false }
                 )
-                .setThumbnail(`${i}`)
+                .setThumbnail(icon)
                 .setFooter({ text: 'Powered By WeatherAPI.com' });
         } else {
             embed = new EmbedBuilder()
                 .setColor('#3498DB')
-                .setTitle(`**${ct}**`)
+                .setTitle(conditiontext)
                 .addFields(
-                    { name: 'Temp', value: `${current.temp_c}°C`, inline: true },
-                    { name: 'Humidity', value: `${current.humidity}%`, inline: true },
-                    { name: 'Wind', value: `${current.wind_kph} km/h`, inline: true },
-                    { name: 'Last updated', value: `${current.last_updated} ${location.region}`, inline: false }
+                    { name: 'Temperature', value: `${temp_c}°C (${temp_f}°F)`, inline: true },
+                    { name: 'Feels Like', value: `${feelslike_c}°C (${feelslike_f}°F)`, inline: true },
+                    { name: 'Humidity', value: `${humidity}%`, inline: true },
+                    { name: 'Wind', value: `${wind_indicator}${wd}° ${wind_kph} km/h`, inline: true },
+                    { name: 'Pressure', value: `${pressure_mb} mb (${pressure_in} in)`, inline: true },
+                    { name: 'Cloud Cover', value: `${cloud}%`, inline: true },
+                    { name: 'Visibility', value: `${vis_km} km (${vis_miles} mi)`, inline: true },
+                    { name: 'UV Index', value: `${uv}`, inline: true },
+                    { name: 'Last updated', value: `${last_updated} ${region}, ${country}`, inline: false }
                 )
-                .setThumbnail(`${i}`)
+                .setThumbnail(icon)
                 .setFooter({ text: 'Powered By WeatherAPI.com' });
         }
 
