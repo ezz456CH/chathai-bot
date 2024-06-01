@@ -23,7 +23,7 @@ const weatheren = 'Get weather information';
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('help')
-        .setDescription('List all available commands)')
+        .setDescription('List all available commands')
         .setDescriptionLocalizations({
             th: 'คำสั่งทั้งหมดที่พร้อมใช้งาน'
         }),
