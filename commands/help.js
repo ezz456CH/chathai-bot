@@ -18,7 +18,7 @@ const minecraftskinen = 'Get Minecraft skin from username';
 const nearbyflighten = 'Get nearby flight data from adsb.ezz456ch.xyz with latitude and longitude';
 const serverinfoen = 'Provide information about the Bot\'s server (e.g., CPU or RAM usage)';
 const translateen = 'Translate';
-const weatheren = 'Get weather infomation';
+const weatheren = 'Get weather information';
 
 module.exports = {
     data: new SlashCommandBuilder()

@@ -42,7 +42,7 @@ A Discord bot that can do a few things.
 
 ### /weather
 
-ดูข้อมูลสภาพอากาศ(Get weather infomation)
+ดูข้อมูลสภาพอากาศ(Get weather information)
 
 ## อันนี้เผื่อมีคนสงสัย(Just in case anyone is wondering)
 
