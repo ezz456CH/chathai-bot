@@ -61,7 +61,7 @@ module.exports = {
             datasource = 'adsb.lol';
         }
 
-        if (!ezz456chres.data.ac?.length || !adsblolres.data.ac?.length) {
+        if (!ezz456chres.data.ac?.length && !adsblolres.data.ac?.length) {
             let embed = new EmbedBuilder()
                 .setColor('#FF5555')
                 .setTitle(interaction.locale === 'th' ? `(╯°□°）╯︵ ┻━┻ ▹ ไม่มีเครื่องบินในระยะใกล้เคียง` : `(╯°□°）╯︵ ┻━┻ ▹ No nearby flights found`)
