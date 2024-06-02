@@ -32,8 +32,7 @@ module.exports = {
             const nwRxMbps = nwinfo && nwinfo[0] ? nwinfo[0].rx_sec / 125000 : 0;
             const nwTxMbps = nwinfo && nwinfo[0] ? nwinfo[0].tx_sec / 125000 : 0;
 
-            let messageping = Date.now() - interaction.createdTimestamp;
-            if (messageping > 1000) messageping = (messageping / 1000);
+            const messageping = Date.now() - interaction.createdTimestamp;
 
             const uptime = osut.uptime();
 
@@ -55,7 +54,7 @@ module.exports = {
                     .addFields(
                         { name: 'CPU', value: `\`\`\`yaml\nCPU Model: ${cpumodel}\nCPU Usage: ${cpuusage}%\`\`\``, inline: true },
                         { name: 'RAM Usage', value: `\`\`\`yaml\nSystem RAM Usage: ${memory.usedMemMb} MB\nBot RAM Usage: ${botmemory.toFixed(2)} MB\`\`\``, inline: true },
-                        { name: 'Latency', value: `\`\`\`yaml\nLatency: ${messageping}ms\nWebsocket Latency: ${client.ws.ping}ms\`\`\``, inline: true },
+                        { name: 'Latency', value: `\`\`\`yaml\nMessage Latency: ${messageping}ms\nWebsocket Latency: ${client.ws.ping}ms\`\`\``, inline: true },
                         { name: 'Network', value: `\`\`\`yaml\nUpload: ${nwTxMbps.toFixed(2)} Mbps\nDownload: ${nwRxMbps.toFixed(2)} Mbps\`\`\``, inline: true },
                         { name: 'Uptime', value: `\`\`\`yaml\nSystem Uptime: ${uptimeH} hours, ${uptimeM} minutes, ${uptimeS} seconds\nBot Uptime: ${cliuptimeH} hours, ${cliuptimeM} minutes, ${cliuptimeS} seconds\`\`\``, inline: true },
                     );
@@ -66,7 +65,7 @@ module.exports = {
                     .addFields(
                         { name: 'CPU', value: `\`\`\`yaml\nCPU Model: ${cpumodel}\nCPU Usage: ${cpuusage}%\`\`\``, inline: true },
                         { name: 'RAM Usage', value: `\`\`\`yaml\nSystem RAM Usage: ${memory.usedMemMb} MB\nBot RAM Usage: ${botmemory.toFixed(2)} MB\`\`\``, inline: true },
-                        { name: 'Latency', value: `\`\`\`yaml\nLatency: ${messageping}ms\nWebsocket Latency: ${client.ws.ping}ms\`\`\``, inline: true },
+                        { name: 'Latency', value: `\`\`\`yaml\nMessage Latency: ${messageping}ms\nWebsocket Latency: ${client.ws.ping}ms\`\`\``, inline: true },
                         { name: 'Network', value: `\`\`\`yaml\nUpload: ${nwTxMbps.toFixed(2)} Mbps\nDownload: ${nwRxMbps.toFixed(2)} Mbps\`\`\``, inline: true },
                         { name: 'Uptime', value: `\`\`\`yaml\nSystem Uptime: ${uptimeH} hours, ${uptimeM} minutes, ${uptimeS} seconds\nBot Uptime: ${cliuptimeH} hours, ${cliuptimeM} minutes, ${cliuptimeS} seconds\`\`\``, inline: true },
                     );
