@@ -42,18 +42,30 @@ module.exports = {
         const lat = interaction.options.getNumber('lat');
         const lon = interaction.options.getNumber('lon');
         const radius = interaction.options.getNumber('radius_nmi');
-        const url = `https://api.ezz456ch.xyz/api/v2/circle/${lat}/${lon}/${radius}`;
+        const adsbezz456chxyzapi = `https://api.ezz456ch.xyz/api/v2/circle/${lat}/${lon}/${radius}`;
+        const adsblolapi = `https://api.adsb.lol/v2/point/${lat}/${lon}/${radius}`;
 
         await interaction.deferReply();
 
-        const response = await axios.get(url);
-        const data = response.data;
+        const ezz456chres = await axios.get(adsbezz456chxyzapi);
+        const adsblolres = await axios.get(adsblolapi);
 
-        if (!data.ac?.length) {
+        let data;
+        let datasource;
+
+        if (ezz456chres.data.ac?.length && (!adsblolres.data.ac || ezz456chres.data.ac.length >= adsblolres.data.ac.length)) {
+            data = ezz456chres.data;
+            datasource = 'adsb.ezz456ch.xyz';
+        } else if (adsblolres.data.ac?.length) {
+            data = adsblolres.data;
+            datasource = 'adsb.lol';
+        }
+
+        if (!ezz456chres.data.ac?.length || !adsblolres.data.ac?.length) {
             let embed = new EmbedBuilder()
                 .setColor('#FF5555')
                 .setTitle(interaction.locale === 'th' ? `(╯°□°）╯︵ ┻━┻ ▹ ไม่มีเครื่องบินในระยะใกล้เคียง` : `(╯°□°）╯︵ ┻━┻ ▹ No nearby flights found`)
-                .setFooter({ text: `Powered By adsb.ezz456ch.xyz` });
+                .setFooter({ text: `Powered By adsb.ezz456ch.xyz and adsb.lol` });
 
             await interaction.editReply({ embeds: [embed] });
             return;
@@ -85,7 +97,7 @@ module.exports = {
                 .addFields(
                     { name: `${callsign} Information`, value: `\`\`\`yaml\n${reg} ${type}\n${gs} kt ${vertrateindicator}${alt_baro} ft\n${callsign}\`\`\``, inline: true },
                 )
-                .setFooter({ text: `Powered By adsb.ezz456ch.xyz` });
+                .setFooter({ text: `Powered By ${datasource}` });
         });
 
         await pagination({

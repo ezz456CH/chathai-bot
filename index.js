@@ -16,7 +16,7 @@ client.commands = new Collection();
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
-console.log(`${[nowutcstring]} [INFO] Loading commands from ${commandsPath}...`);
+console.log(`[INFO] [${nowutcstring}] Loading commands from ${commandsPath}...`);
 for (const file of commandFiles) {
     const filePath = path.join(commandsPath, file);
     const command = require(filePath);
@@ -24,11 +24,11 @@ for (const file of commandFiles) {
     if ('data' in command && 'execute' in command) {
         client.commands.set(command.data.name, command);
     } else {
-        console.warn(`${[nowutcstring]} [WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+        console.warn(`[WARNING] [${nowutcstring}] The command at ${filePath} is missing a required "data" or "execute" property.`);
     }
 }
 
-console.log(`${[nowutcstring]} [INFO] Registering slash commands...`);
+console.log(`[INFO] [${nowutcstring}] Registering slash commands...`);
 const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
 (async () => {
     try {
@@ -37,14 +37,14 @@ const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
             { body: client.commands.map(cmd => cmd.data.toJSON()) },
         );
 
-        console.log(`${[nowutcstring]} [INFO] Slash commands were registered successfully!`);
+        console.log(`[INFO] [${nowutcstring}] Slash commands were registered successfully!`);
     } catch (error) {
-        console.error(`${[nowutcstring]} [ERROR] There was an error while registering slash commands:`, error);
+        console.error(`[${nowutcstring}] [ERROR] There was an error while registering slash commands:`, error);
     }
 })();
 
 client.on('ready', () => {
-    console.log(`${[nowutcstring]} [INFO] Bot is ready Meow!`);
+    console.log(`[INFO] [${nowutcstring}] Bot is ready Meow!`);
 
     client.user.setActivity({
         name: '> /help',

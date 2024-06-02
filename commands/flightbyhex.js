@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const axios = require('axios');
 
 const date = new Date();
@@ -20,28 +20,39 @@ module.exports = {
     async execute(interaction) {
         const { options } = interaction;
         const hex = options.getString('hex');
-        const url = `https://api.ezz456ch.xyz/api/v2/hex/${hex}`;
+        const adsbezz456chxyzapi = `https://api.ezz456ch.xyz/api/v2/hex/${hex}`;
+        const adsblolapi = `https://api.adsb.lol/v2/hex/${hex}`;
         const planespottersapi = `https://api.planespotters.net/pub/photos/hex`;
+        const hexdbiorouteiata = `https://hexdb.io/api/v1/route/iata`;
 
         await interaction.deferReply();
-        
-        const response = await axios.get(url);
-        const data = response.data;
 
-        if (!data.ac?.length) {
+        const ezz456chres = await axios.get(adsbezz456chxyzapi);
+        const adsblolres = await axios.get(adsblolapi);
+
+        let data;
+        let datasource;
+
+        if (ezz456chres.data.ac?.length) {
+            data = ezz456chres.data;
+            datasource = 'adsb.ezz456ch.xyz';
+        } else if (adsblolres.data.ac?.length) {
+            data = adsblolres.data;
+            datasource = 'adsb.lol';
+        } else {
             let embed;
             if (interaction.locale === 'th') {
                 embed = new EmbedBuilder()
                     .setColor('#FF5555')
                     .setTitle(`ไม่พบเครื่องบิน / เที่ยวบินนี้`)
-                    .setDescription(`เครื่องบินอาจอยู่นอกพื้นที่ครอบคลุม\nคุณสามารถช่วยเพิ่มความครอบคลุมของข้อมูล ADS-B/MLAT ได้ที่นี่: https://docs.ezz456ch.xyz/add-adsb-coverage`)
-                    .setFooter({ text: `Powered By adsb.ezz456ch.xyz, hexdb.io and PlaneSpotter API` });
+                    .setDescription(`เครื่องบินอาจอยู่นอกพื้นที่ครอบคลุม\nคุณสามารถช่วยเพิ่มความครอบคลุมของข้อมูล ADS-B/MLAT ได้ที่นี่:\nadsb.ezz456ch.xyz: https://docs.ezz456ch.xyz/add-adsb-coverage\nadsb.lol: https://www.adsb.lol/docs/get-started/introduction`)
+                    .setFooter({ text: `Powered By adsb.ezz456ch.xyz, adsb.lol, hexdb.io, and PlaneSpotter` });
             } else {
                 embed = new EmbedBuilder()
                     .setColor('#FF5555')
                     .setTitle(`Flight not found`)
-                    .setDescription(`The aircraft may be outside the coverage area.\nYou can help improve ADS-B/MLAT coverage here: https://docs.ezz456ch.xyz/add-adsb-coverage`)
-                    .setFooter({ text: `Powered By adsb.ezz456ch.xyz, hexdb.io and PlaneSpotter API` });
+                    .setDescription(`The aircraft may be outside the coverage area.\nYou can help improve ADS-B/MLAT coverage here:\n\`adsb.ezz456ch.xyz\`: https://docs.ezz456ch.xyz/add-adsb-coverage\n\`adsb.lol\`: https://www.adsb.lol/docs/get-started/introduction`)
+                    .setFooter({ text: `Powered By adsb.ezz456ch.xyz, adsb.lol, hexdb.io, and PlaneSpotter` });
             }
             await interaction.editReply({ embeds: [embed] });
             return;
@@ -61,8 +72,8 @@ module.exports = {
         let ias = data.ac[0].ias != null ? data.ac[0].ias.toFixed(0) : "n/a";
         let mach = data.ac[0].mach != null ? data.ac[0].mach.toFixed(3) : "n/a";
 
-        let alt_baro = data.ac[0].alt_baro != null ? data.ac[0].alt_baro : "n/a";
-        let alt_geom = data.ac[0].alt_geom != null ? data.ac[0].alt_geom : "n/a";
+        let alt_baro = data.ac[0].alt_baro !== "ground" && data.ac[0].alt_baro ? `${data.ac[0].alt_baro} ft` : (data.ac[0].alt_baro === "ground" ? "GND" : "n/a ft");
+        let alt_geom = data.ac[0].alt_geom != null ? `${data.ac[0].alt_geom} ft` : "n/a ft";
         let baro_rate = data.ac[0].baro_rate != null ? data.ac[0].baro_rate : "n/a";
         let geom_rate = data.ac[0].geom_rate != null ? data.ac[0].geom_rate : "n/a";
         let vertrate = data.ac[0].baro_rate != null ? data.ac[0].baro_rate :
@@ -134,7 +145,8 @@ module.exports = {
 
         let thumbnail_large = null;
         let photographer = null;
-        let photoLink = null;
+        let photolink = null;
+
 
         try {
             const planespotter = await axios.get(`${planespottersapi}/${hex}`);
@@ -144,15 +156,62 @@ module.exports = {
                 const photo = planespotterdata.photos[0];
                 thumbnail_large = photo.thumbnail_large?.src ?? null;
                 photographer = photo.photographer ?? null;
-                photoLink = photo.link ?? null;
+                photolink = photo.link ?? null;
             }
         } catch (error) {
-            console.error(`[ERROR] [${nowutcstring}] An error occurred while fetching photo from planespotter:`, error);
+            if (error.code === 'ETIMEOUT' || error.code === 'ENOTFOUND') {
+                console.error(`[ERROR] [${nowutcstring}] Planespotter API request failed!`)
+            } else {
+                console.error(`[ERROR] [${nowutcstring}] An error occurred while fetching photo from planespotter:`, error);
+            }
         }
 
         let imagecopyright = thumbnail_large
-            ? `Image © ${photographer}\n${photoLink}`
+            ? `Image © ${photographer}`
             : "No image available";
+
+        let img_copyright_btn
+
+        if (photolink) {
+            img_copyright_btn = new ButtonBuilder()
+                .setLabel(imagecopyright)
+                .setURL(photolink)
+                .setStyle(ButtonStyle.Link);
+        } else {
+            img_copyright_btn = new ButtonBuilder()
+                .setCustomId('img_copyright_btn')
+                .setLabel(imagecopyright)
+                .setStyle(ButtonStyle.Danger)
+                .setDisabled(true);
+        }
+
+        const img_copyright = new ActionRowBuilder()
+            .addComponents(img_copyright_btn);
+
+        let routeiata = "n/a";
+
+        if (callsign2 !== "No callsign") {
+            try {
+                const hexdbiorouteres = await axios.get(`${hexdbiorouteiata}/${callsign}`);
+                if (hexdbiorouteres && hexdbiorouteres.status === 200 && hexdbiorouteres.data) {
+                    const hexdbioroutedata = hexdbiorouteres.data;
+                    routeiata = hexdbioroutedata.route;
+                    updatetimerouteiata = new Date(hexdbioroutedata.updatetime * 1000).toUTCString();
+                }
+            } catch (error) {
+                if (error.response) {
+                    if (error.response.status === 404) {
+                        console.warn(`[WARN] [${new Date().toUTCString()}] Route information not found for callsign: ${callsign2}`);
+                    } else {
+                        console.error(`[ERROR] [${new Date().toUTCString()}] An error occurred while fetching route information for callsign: ${callsign2} - Status: ${error.response.status}`, error);
+                    }
+                } else if (error.request) {
+                    console.error(`[ERROR] [${new Date().toUTCString()}] No response received while fetching route information for callsign: ${callsign2}`, error);
+                } else {
+                    console.error(`[ERROR] [${new Date().toUTCString()}] An error occurred while fetching route information for callsign: ${callsign2}`, error);
+                }
+            }
+        }
 
         let embed;
         if (interaction.locale === 'th') {
@@ -160,31 +219,34 @@ module.exports = {
                 .setColor('#FFB6C1')
                 .setTitle(callsign2)
                 .addFields(
-                    { name: `${callsign} Information`, value: `\`\`\`yaml\nReg.: ${reg}\nAircraft type: ${type}\nHex: ${hex2}\nSquawk: ${squawk}\nPos.: ${lat}, ${lon}\`\`\``, inline: false },
+                    { name: `${callsign} Information`, value: `\`\`\`yaml\nRoute: ${routeiata}\nReg.: ${reg}\nAircraft type: ${type}\nHex: ${hex2}\nSquawk: ${squawk}\nPos.: ${lat}, ${lon}\`\`\``, inline: false },
                     { name: 'Speed', value: `\`\`\`yaml\nGround Speed: ${gs} kt\nTrue Airspeed: ${tas} kt\nIndicated Airspeed: ${ias} kt\nMach: ${mach}\`\`\``, inline: false },
-                    { name: 'Altitude', value: `\`\`\`yaml\nBaro. Altitude: ${alt_baro} ft\nBaro. Rate: ${baro_rate} ft/min\nWGS84 Altitude: ${alt_geom} ft\nGeom. Rate: ${geom_rate} ft/min\nVert. Rate: ${vertrateindicator}${vertrate} ft/min\`\`\``, inline: false },
+                    { name: 'Altitude', value: `\`\`\`yaml\nBaro. Altitude: ${alt_baro}\nBaro. Rate: ${baro_rate} ft/min\nWGS84 Altitude: ${alt_geom}\nGeom. Rate: ${geom_rate} ft/min\nVert. Rate: ${vertrateindicator}${vertrate} ft/min\`\`\``, inline: false },
                     { name: 'Direction', value: `\`\`\`yaml\nGround Track: ${track}°\nTrue Heading: ${true_heading}°\nMagnetic Heading: ${mag_heading}°\`\`\``, inline: false },
                     { name: 'Wind', value: `\`\`\`yaml\nWind Direction: ${wind_indicator}${wd}°\nWind Speed: ${ws} kt\`\`\``, inline: false },
                     { name: 'Signal & Data Source', value: `\`\`\`yaml\nSource: ${source}\nRSSI: ${rssi}\nLast Pos.: ${seen_pos} s\nLast Seen: ${seen} s\`\`\``, inline: false },
                 )
                 .setImage(thumbnail_large)
-                .setFooter({ text: `Powered By adsb.ezz456ch.xyz and PlaneSpotter API\n${imagecopyright}` });
+                .setFooter({ text: `Powered By ${datasource}, hexdb.io and PlaneSpotter` });
         } else {
             embed = new EmbedBuilder()
                 .setColor('#FFB6C1')
                 .setTitle(callsign2)
                 .addFields(
-                    { name: `${callsign} Infomation`, value: `\`\`\`yaml\nReg.: ${reg}\nAircraft type: ${type}\nHex: ${hex2}\nSquawk: ${squawk}\nPos.: ${lat}, ${lon}\`\`\``, inline: false },
+                    { name: `${callsign} Infomation`, value: `\`\`\`yaml\nRoute: ${routeiata}\nReg.: ${reg}\nAircraft type: ${type}\nHex: ${hex2}\nSquawk: ${squawk}\nPos.: ${lat}, ${lon}\`\`\``, inline: false },
                     { name: 'Speed', value: `\`\`\`yaml\nGround Speed: ${gs} kt\nTrue Airspeed: ${tas} kt\nIndicated Airspeed: ${ias} kt\nMach: ${mach}\`\`\``, inline: false },
-                    { name: 'Altitude', value: `\`\`\`yaml\nBaro. Altitude: ${alt_baro} ft\nBaro. Rate: ${baro_rate} ft/min\nWGS84 Altitude: ${alt_geom} ft\nGeom. Rate: ${geom_rate} ft/min\nVert. Rate: ${vertrateindicator}${vertrate} ft/min\`\`\``, inline: false },
+                    { name: 'Altitude', value: `\`\`\`yaml\nBaro. Altitude: ${alt_baro}\nBaro. Rate: ${baro_rate} ft/min\nWGS84 Altitude: ${alt_geom}\nGeom. Rate: ${geom_rate} ft/min\nVert. Rate: ${vertrateindicator}${vertrate} ft/min\`\`\``, inline: false },
                     { name: 'Direction', value: `\`\`\`yaml\nGround Track: ${track}°\nTrue Heading: ${true_heading}°\nMagnetic Heading: ${mag_heading}°\`\`\``, inline: false },
                     { name: 'Wind', value: `\`\`\`yaml\nWind Direction: ${wind_indicator}${wd}°\nWind Speed: ${ws} kt\`\`\``, inline: false },
                     { name: 'Signal & Data Source', value: `\`\`\`yaml\nSource: ${source}\nRSSI: ${rssi}\nLast Pos.: ${seen_pos} s\nLast Seen: ${seen} s\`\`\``, inline: false },
                 )
                 .setImage(thumbnail_large)
-                .setFooter({ text: `Powered By adsb.ezz456ch.xyz and PlaneSpotter API\n${imagecopyright}` });
+                .setFooter({ text: `Powered By ${datasource}, hexdb.io and PlaneSpotter` });
         }
 
-        await interaction.editReply({ embeds: [embed] });
+        await interaction.editReply({
+            embeds: [embed],
+            components: [img_copyright],
+        });
     }
 };
