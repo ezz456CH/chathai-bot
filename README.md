@@ -14,11 +14,11 @@ A Discord bot that can do a few things.
 
 ### /flightbycallsign
 
-ดูข้อมูลเครื่องบินจาก adsb.ezz456ch.xyz ด้วย Callsign(Get flight data from adsb.ezz456ch.xyz by callsign)
+ดูข้อมูลเครื่องบินด้วย Callsign(Get flight data by callsign)
 
 ### /flightbyhex
 
-ดูข้อมูลเครื่องบินจาก adsb.ezz456ch.xyz ด้วย Hex(Get flight data from adsb.ezz456ch.xyz by hex)
+ดูข้อมูลเครื่องบินด้วย Hex(Get flight data by hex)
 
 ### /genshin-team-randomizer
 
@@ -30,7 +30,7 @@ A Discord bot that can do a few things.
 
 ### /nearbyflight
 
-ดูข้อมูลเครื่องบินใกล้เคียงจาก adsb.ezz456ch.xyz ด้วยละติจูดและลองติจูด(Get nearby flight data from adsb.ezz456ch.xyz with latitude and longitude)
+ดูข้อมูลเครื่องบินใกล้เคียงด้วยละติจูดและลองติจูด(Get nearby flight data with latitude and longitude)
 
 ### /server-info
 

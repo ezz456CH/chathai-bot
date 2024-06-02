@@ -1,21 +1,21 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 const donateth = 'เลี้ยงค่าขนมให้ ezz456CH ❤';
-const flightbycallsignth = 'ดูข้อมูลเครื่องบินจาก adsb.ezz456ch.xyz ด้วย Callsign';
-const flightbyhexth = 'ดูข้อมูลเครื่องบินจาก adsb.ezz456ch.xyz ด้วย Hex';
+const flightbycallsignth = 'ดูข้อมูลเครื่องบินด้วย Callsign';
+const flightbyhexth = 'ดูข้อมูลเครื่องบินด้วย Hex';
 const genshinteamrandomizerth = 'สุ่มทีม Genshin Impact';
 const minecraftskinth = 'สกิน Minecraft จาก Username';
-const nearbyflightth = 'ดูข้อมูลเครื่องบินใกล้เคียงจาก adsb.ezz456ch.xyz ด้วยละติจูดและลองติจูด';
+const nearbyflightth = 'ดูข้อมูลเครื่องบินใกล้เคียงด้วยละติจูดและลองติจูด';
 const serverinfoth = 'บอกข้อมูลเซิร์ฟเวอร์ของ Bot(เช่น CPU หรือ RAM ที่ใช้อยู่)';
 const translateth = 'แปลภาษา';
 const weatherth = 'ดูข้อมูลสภาพอากาศ';
 
 const donateen = 'Support ezz456CH by donating ❤';
-const flightbycallsignen = 'Get flight data from adsb.ezz456ch.xyz by callsign';
-const flightbyhexen = 'Get flight data from adsb.ezz456ch.xyz by hex';
+const flightbycallsignen = 'Get flight data by callsign';
+const flightbyhexen = 'Get flight data by hex';
 const genshinteamrandomizeren = 'Generate a random Genshin Impact team';
 const minecraftskinen = 'Get Minecraft skin from username';
-const nearbyflighten = 'Get nearby flight data from adsb.ezz456ch.xyz with latitude and longitude';
+const nearbyflighten = 'Get nearby flight data with latitude and longitude';
 const serverinfoen = 'Provide information about the Bot\'s server (e.g., CPU or RAM usage)';
 const translateen = 'Translate';
 const weatheren = 'Get weather information';
