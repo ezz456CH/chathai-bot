@@ -216,7 +216,7 @@ module.exports = {
 				.addFields(
 					{ name: `${callsign2} Information`, value: `\`\`\`yaml\nRoute: ${routeiata}\nReg.: ${reg}\nAircraft type: ${type}\nHex: ${hex.toUpperCase()}\nSquawk: ${squawk}\nPos.: ${lat}, ${lon}\`\`\``, inline: false },
 					{ name: 'Speed', value: `\`\`\`yaml\nGround Speed: ${gs} kt\nTrue Airspeed: ${tas} kt\nIndicated Airspeed: ${ias} kt\nMach: ${mach}\`\`\``, inline: false },
-					{ name: 'Altitude', value: `\`\`\`yaml\nBaro. Altitude: ${alt_baro} ft\nBaro. Rate: ${baro_rate} ft/min\nWGS84 Altitude: ${alt_geom} ft\nGeom. Rate: ${geom_rate} ft/min\nVert. Rate: ${vertrateindicator}${vertrate} ft/min\`\`\``, inline: false },
+					{ name: 'Altitude', value: `\`\`\`yaml\nBaro. Altitude: ${alt_baro}\nBaro. Rate: ${baro_rate} ft/min\nWGS84 Altitude: ${alt_geom}\nGeom. Rate: ${geom_rate} ft/min\nVert. Rate: ${vertrateindicator}${vertrate} ft/min\`\`\``, inline: false },
 					{ name: 'Direction', value: `\`\`\`yaml\nGround Track: ${track}°\nTrue Heading: ${true_heading}°\nMagnetic Heading: ${mag_heading}°\`\`\``, inline: false },
 					{ name: 'Wind', value: `\`\`\`yaml\nWind Direction: ${wind_indicator}${wd}°\nWind Speed: ${ws} kt\`\`\``, inline: false },
 					{ name: 'Signal & Data Source', value: `\`\`\`yaml\nSource: ${source}\nRSSI: ${rssi}\nLast Pos.: ${seen_pos} s\nLast Seen: ${seen} s\`\`\``, inline: false },
@@ -230,6 +230,7 @@ module.exports = {
 				.addFields(
 					{ name: `${callsign2} Information`, value: `\`\`\`yaml\nRoute: ${routeiata}\nReg.: ${reg}\nAircraft type: ${type}\nHex: ${hex.toUpperCase()}\nSquawk: ${squawk}\nPos.: ${lat}, ${lon}\`\`\``, inline: false },
 					{ name: 'Speed', value: `\`\`\`yaml\nGround Speed: ${gs} kt\nTrue Airspeed: ${tas} kt\nIndicated Airspeed: ${ias} kt\nMach: ${mach}\`\`\``, inline: false },
+					{ name: 'Altitude', value: `\`\`\`yaml\nBaro. Altitude: ${alt_baro}\nBaro. Rate: ${baro_rate} ft/min\nWGS84 Altitude: ${alt_geom}\nGeom. Rate: ${geom_rate} ft/min\nVert. Rate: ${vertrateindicator}${vertrate} ft/min\`\`\``, inline: false },
 					{ name: 'Direction', value: `\`\`\`yaml\nGround Track: ${track}°\nTrue Heading: ${true_heading}°\nMagnetic Heading: ${mag_heading}°\`\`\``, inline: false },
 					{ name: 'Wind', value: `\`\`\`yaml\nWind Direction: ${wind_indicator}${wd}°\nWind Speed: ${ws} kt\`\`\``, inline: false },
 					{ name: 'Signal & Data Source', value: `\`\`\`yaml\nSource: ${source}\nRSSI: ${rssi}\nLast Pos.: ${seen_pos} s\nLast Seen: ${seen} s\`\`\``, inline: false },
