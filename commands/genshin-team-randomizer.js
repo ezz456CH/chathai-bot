@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const characters = require('../data/gi-characters.json');
+const characters = require('../data/genshin-impact/characters-list.json');
 
 const client = require('../index');
 
