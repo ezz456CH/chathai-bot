@@ -79,7 +79,7 @@ module.exports = {
             let reg = flight.r != null ? flight.r : "?"
             let type = flight.t != null ? flight.t : "?"
             let gs = flight.gs != null ? flight.gs.toFixed(0) : "?";
-            let alt_baro = flight.alt_baro != null ? flight.alt_baro : "?";
+            let alt_baro = flight.alt_baro !== "ground" && flight.alt_baro ? `${flight.alt_baro} ft` : (flight.alt_baro === "ground" ? "GND" : "n/a ft");
 
             let vertrate = flight.baro_rate != null ? flight.baro_rate : (flight.geom_rate != null ? flight.geom_rate : "n/a");
             let vertrateindicator = "";
@@ -95,7 +95,7 @@ module.exports = {
                 .setColor('#f279af')
                 .setTitle(callsign2)
                 .addFields(
-                    { name: `${callsign} Information`, value: `\`\`\`yaml\n${reg} ${type}\n${gs} kt ${vertrateindicator}${alt_baro} ft\n${callsign}\`\`\``, inline: true },
+                    { name: `${callsign} Information`, value: `\`\`\`yaml\n${reg} ${type}\n${gs} kt ${vertrateindicator}${alt_baro}\n${callsign}\`\`\``, inline: true },
                 )
                 .setFooter({ text: `Powered By ${datasource}` });
         });
