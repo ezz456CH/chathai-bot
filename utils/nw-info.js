@@ -1,6 +1,6 @@
 const si = require('systeminformation');
 
-class nwinfoc {
+class nwinfo {
   constructor() {
     this.cache = null;
     this.updateInterval = 1000;
@@ -12,14 +12,14 @@ class nwinfoc {
       this.cache = await si.networkStats();
       setTimeout(() => this.update(), this.updateInterval);
     } catch (error) {
-      console.error('Error updating network cache:', error);
+      console.error('Error updating nwinfo cache:', error);
       setTimeout(() => this.update(), this.updateInterval);
     }
   }
 
-  getNetworkStats() {
+  network() {
     return this.cache;
   }
 }
 
-module.exports = { nwinfoc: new nwinfoc() };
+module.exports = { nwinfo: new nwinfo() };

@@ -2,12 +2,8 @@ const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 const client = require('../index');
 
-const os = require('node-os-utils');
-const cpu = os.cpu
-const mem = os.mem
-
-const { nwinfoc } = require('../network/network');
-const osut = require('os');
+const { nwinfo } = require('../utils/nw-info');
+const { sysinfo } = require('../utils/sys-info');
 
 const date = new Date();
 const nowutcstring = date.toUTCString();
@@ -23,22 +19,17 @@ module.exports = {
         try {
             await interaction.deferReply();
 
-            const cpumodel = cpu.model();
-            const cpuusage = await cpu.usage();
-            const memory = await mem.used();
+            const cpumodel = sysinfo.cpu();
+            const cpuusage = sysinfo.cpuusage();
+            const mem = sysinfo.mem();
             const botmemory = process.memoryUsage().heapUsed / 1024 / 1024;
+            const sysuptime = sysinfo.uptime();
 
-            const nwinfo = nwinfoc.getNetworkStats();
-            const nwRxMbps = nwinfo && nwinfo[0] ? nwinfo[0].rx_sec / 125000 : 0;
-            const nwTxMbps = nwinfo && nwinfo[0] ? nwinfo[0].tx_sec / 125000 : 0;
+            const net = nwinfo.network();
+            const netrx = net && net[0] ? net[0].rx_sec / 125000 : 0;
+            const nettx = net && net[0] ? net[0].tx_sec / 125000 : 0;
 
             const messageping = Date.now() - interaction.createdTimestamp;
-
-            const uptime = osut.uptime();
-
-            const uptimeH = Math.floor(uptime / 3600);
-            const uptimeM = Math.floor((uptime % 3600) / 60);
-            const uptimeS = Math.floor(uptime % 60);
 
             let cliuptime = client.uptime / 1000;
             let cliuptimeH = Math.floor(cliuptime / 3600);
@@ -52,22 +43,22 @@ module.exports = {
                     .setColor('#ADD8E6')
                     .setTitle('ข้อมูลเซิร์ฟเวอร์ของ Bot')
                     .addFields(
-                        { name: 'CPU', value: `\`\`\`yaml\nCPU Model: ${cpumodel}\nCPU Usage: ${cpuusage}%\`\`\``, inline: true },
-                        { name: 'RAM Usage', value: `\`\`\`yaml\nSystem RAM Usage: ${memory.usedMemMb} MB\nBot RAM Usage: ${botmemory.toFixed(2)} MB\`\`\``, inline: true },
+                        { name: 'CPU', value: `\`\`\`yaml\nCPU Model: ${cpumodel}\nCPU Usage: ${cpuusage}\`\`\``, inline: true },
+                        { name: 'RAM Usage', value: `\`\`\`yaml\nSystem RAM Usage: ${mem}\nBot RAM Usage: ${botmemory.toFixed(2)} MB\`\`\``, inline: true },
                         { name: 'Latency', value: `\`\`\`yaml\nMessage Latency: ${messageping}ms\nWebsocket Latency: ${client.ws.ping}ms\`\`\``, inline: true },
-                        { name: 'Network', value: `\`\`\`yaml\nUpload: ${nwTxMbps.toFixed(2)} Mbps\nDownload: ${nwRxMbps.toFixed(2)} Mbps\`\`\``, inline: true },
-                        { name: 'Uptime', value: `\`\`\`yaml\nSystem Uptime: ${uptimeH} hours, ${uptimeM} minutes, ${uptimeS} seconds\nBot Uptime: ${cliuptimeH} hours, ${cliuptimeM} minutes, ${cliuptimeS} seconds\`\`\``, inline: true },
+                        { name: 'Network', value: `\`\`\`yaml\nUpload: ${nettx.toFixed(2)} Mbps\nDownload: ${netrx.toFixed(2)} Mbps\`\`\``, inline: true },
+                        { name: 'Uptime', value: `\`\`\`yaml\nSystem Uptime: ${sysuptime}\nBot Uptime: ${cliuptimeH} hours, ${cliuptimeM} minutes, ${cliuptimeS} seconds\`\`\``, inline: true },
                     );
             } else {
                 embed = new EmbedBuilder()
                     .setColor('#ADD8E6')
                     .setTitle(`Bot's server information`)
                     .addFields(
-                        { name: 'CPU', value: `\`\`\`yaml\nCPU Model: ${cpumodel}\nCPU Usage: ${cpuusage}%\`\`\``, inline: true },
-                        { name: 'RAM Usage', value: `\`\`\`yaml\nSystem RAM Usage: ${memory.usedMemMb} MB\nBot RAM Usage: ${botmemory.toFixed(2)} MB\`\`\``, inline: true },
+                        { name: 'CPU', value: `\`\`\`yaml\nCPU Model: ${cpumodel}\nCPU Usage: ${cpuusage}\`\`\``, inline: true },
+                        { name: 'RAM Usage', value: `\`\`\`yaml\nSystem RAM Usage: ${mem}\nBot RAM Usage: ${botmemory.toFixed(2)} MB\`\`\``, inline: true },
                         { name: 'Latency', value: `\`\`\`yaml\nMessage Latency: ${messageping}ms\nWebsocket Latency: ${client.ws.ping}ms\`\`\``, inline: true },
-                        { name: 'Network', value: `\`\`\`yaml\nUpload: ${nwTxMbps.toFixed(2)} Mbps\nDownload: ${nwRxMbps.toFixed(2)} Mbps\`\`\``, inline: true },
-                        { name: 'Uptime', value: `\`\`\`yaml\nSystem Uptime: ${uptimeH} hours, ${uptimeM} minutes, ${uptimeS} seconds\nBot Uptime: ${cliuptimeH} hours, ${cliuptimeM} minutes, ${cliuptimeS} seconds\`\`\``, inline: true },
+                        { name: 'Network', value: `\`\`\`yaml\nUpload: ${nettx.toFixed(2)} Mbps\nDownload: ${netrx.toFixed(2)} Mbps\`\`\``, inline: true },
+                        { name: 'Uptime', value: `\`\`\`yaml\nSystem Uptime: ${sysuptime}\nBot Uptime: ${cliuptimeH} hours, ${cliuptimeM} minutes, ${cliuptimeS} seconds\`\`\``, inline: true },
                     );
             }
 
