@@ -97,21 +97,21 @@ module.exports = {
         let ws = data.ac[0].ws != null ? data.ac[0].ws : "n/a";
         let wd = data.ac[0].wd != null ? data.ac[0].wd : "n/a";
         let wind_indicator = "";
-        if (wd >= 0 && wd < 45) {
+        if (wd >= 338 || wd < 23) {
             wind_indicator = "↓ ";
-        } else if (wd >= 45 && wd < 90) {
+        } else if (wd >= 23 && wd < 68) {
             wind_indicator = "↙ ";
-        } else if (wd >= 90 && wd < 135) {
+        } else if (wd >= 68 && wd < 113) {
             wind_indicator = "← ";
-        } else if (wd >= 135 && wd < 180) {
+        } else if (wd >= 113 && wd < 158) {
             wind_indicator = "↖ ";
-        } else if (wd >= 180 && wd < 225) {
+        } else if (wd >= 158 && wd < 203) {
             wind_indicator = "↑ ";
-        } else if (wd >= 225 && wd < 270) {
+        } else if (wd >= 203 && wd < 248) {
             wind_indicator = "↗ ";
-        } else if (wd >= 270 && wd < 315) {
+        } else if (wd >= 248 && wd < 293) {
             wind_indicator = "→ ";
-        } else if (wd >= 315 && wd <= 360) {
+        } else if (wd >= 293 && wd < 338) {
             wind_indicator = "↘ ";
         }
 
