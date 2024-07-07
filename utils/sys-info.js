@@ -12,10 +12,10 @@ class sysinfo {
     }
 
     async update() {
-        try {
-            const date = new Date();
-            const nowutcstring = date.toUTCString();
+        const date = new Date();
+        const nowutcstring = date.toUTCString();
 
+        try {
             const cpuinfo = await si.cpu();
             const cpubrand = cpuinfo.brand ? ` ${cpuinfo.brand} ` : ' ';
             let cpuspeed = cpuinfo.speedMax;
@@ -30,7 +30,7 @@ class sysinfo {
                         cpuspeed = speed.toFixed(1);
                     }
                 } catch (err) {
-                    console.error(`[ERROR] [${nowutcstring}] Error reading /proc/cpuinfo:`, err);
+                    console.warn(`[WARNING] [${nowutcstring}] Failed to read CPU information from /proc/cpuinfo:`, err);
                 }
             }
 
